@@ -1,5 +1,7 @@
-﻿using MvcSports.Domain.Abstract;
+﻿using Moq;
+using MvcSports.Domain.Abstract;
 using MvcSports.Domain.Concrete;
+using MvcSports.Domain.Entities;
 using Ninject;
 using System;
 using System.Collections.Generic;
@@ -31,6 +33,15 @@ namespace MvcSports.WebUI.Infrastructure
         public void AddBindings()
         {
             kernel.Bind<IProductRepository>().To<EFProductRepository>();
+            //Mock<IProductRepository> mock = new Mock<IProductRepository>();
+            //mock.Setup(m => m.Products).Returns(new List<Product>
+            //{
+            //    new Product { Name="Football", Price=25 },
+            //    new Product { Name="Surf board", Price=179 },
+            //    new Product { Name="Running shoes", Price=95 }
+            //});
+
+            //kernel.Bind<IProductRepository>().ToConstant(mock.Object);
         }
     }
 }
