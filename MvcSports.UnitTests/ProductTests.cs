@@ -13,7 +13,7 @@ using MvcSports.WebUI.HtmlHelpers;
 namespace MvcSports.UnitTests
 {
     [TestClass]
-    public class UnitTest1
+    public class ProductTests
     {
         [TestMethod]
         public void Can_Paginate()
