@@ -68,5 +68,10 @@ namespace MvcSports.WebUI.Controllers
         //    }
         //    return cart;
         //}
+
+        public PartialViewResult Summary(Cart cart)
+        {
+            return PartialView(cart);
+        }
     }
 }
