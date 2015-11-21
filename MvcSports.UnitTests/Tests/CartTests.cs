@@ -5,6 +5,8 @@ using System.Linq;
 using MvcSports.Domain.Abstract;
 using Moq;
 using MvcSports.WebUI.Controllers;
+using System.Web.Mvc;
+using MvcSports.WebUI.Models;
 
 namespace MvcSports.UnitTests
 {
@@ -138,6 +140,42 @@ namespace MvcSports.UnitTests
             // Assert
             Assert.AreEqual(cart.Lines.Count(), 1);
             Assert.AreEqual(cart.Lines.ToArray()[0].Product.ProductID, 1);
+        }
+
+        [TestMethod]
+        public void Adding_Product_To_Cart_Goes_Cart_Screen()
+        {
+            // Arrange - create the mock repository
+            Mock<IProductRepository> mock = new Mock<IProductRepository>();
+            mock.Setup(m => m.Products).Returns(new Product[]
+            {
+                new Product {ProductID=1, Name="P1", Category="Apples" },
+            }.AsQueryable());
+
+            Cart cart = new Cart();
+            CartController target = new CartController(mock.Object);
+
+            // Act - add a product to the cart
+            RedirectToRouteResult result = target.AddToCart(cart, 2, "myUrl");
+
+            // Assert
+            Assert.AreEqual(result.RouteValues["action"], "Index");
+            Assert.AreEqual(result.RouteValues["returnUrl"], "myUrl");
+        }
+
+        [TestMethod]
+        public void Can_View_Cart_Contents()
+        {
+            // Arrange - create a Cart
+            Cart cart = new Cart();
+            CartController target = new CartController(null);
+
+            // Act - call the Index action method
+            CartIndexViewModel result = (CartIndexViewModel)target.Index(cart, "myUrl").ViewData.Model;
+
+            // Assert
+            Assert.AreEqual(result.Cart, cart);
+            Assert.AreEqual(result.ReturnUrl, "myUrl");
         }
     }
 }
