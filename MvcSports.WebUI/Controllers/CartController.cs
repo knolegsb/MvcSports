@@ -18,6 +18,7 @@ namespace MvcSports.WebUI.Controllers
         //}
 
         private IProductRepository repository;
+        private IOrderProcessor orderProcessor;
 
         public CartController (IProductRepository repo)
         {
