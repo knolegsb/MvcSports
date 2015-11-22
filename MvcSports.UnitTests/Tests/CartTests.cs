@@ -132,7 +132,7 @@ namespace MvcSports.UnitTests
             Cart cart = new Cart();
 
             // Arrange - create the controller
-            CartController target = new CartController(mock.Object);
+            CartController target = new CartController(mock.Object, null);
 
             // Act - add a product to the cart
             target.AddToCart(cart, 1, null);
@@ -153,7 +153,7 @@ namespace MvcSports.UnitTests
             }.AsQueryable());
 
             Cart cart = new Cart();
-            CartController target = new CartController(mock.Object);
+            CartController target = new CartController(mock.Object, null);
 
             // Act - add a product to the cart
             RedirectToRouteResult result = target.AddToCart(cart, 2, "myUrl");
@@ -168,7 +168,7 @@ namespace MvcSports.UnitTests
         {
             // Arrange - create a Cart
             Cart cart = new Cart();
-            CartController target = new CartController(null);
+            CartController target = new CartController(null, null);
 
             // Act - call the Index action method
             CartIndexViewModel result = (CartIndexViewModel)target.Index(cart, "myUrl").ViewData.Model;
@@ -176,6 +176,29 @@ namespace MvcSports.UnitTests
             // Assert
             Assert.AreEqual(result.Cart, cart);
             Assert.AreEqual(result.ReturnUrl, "myUrl");
+        }
+
+        [TestMethod]
+        public void Cannot_Checkut_Empty_Cart()
+        {
+            // Arrange - create a mock order processor
+            Mock<IOrderProcessor> mock = new Mock<IOrderProcessor>();
+            // Arrange - create an empty cart
+            Cart cart = new Cart();
+            // Arrange - create shipping details
+            ShippingDetails shippingDetails = new ShippingDetails();
+            // Arrange - create an instance of the controller
+            CartController target = new CartController(null, mock.Object);
+
+            // Act
+            ViewResult result = target.Checkout(cart, shippingDetails);
+
+            // Assert - check that the order hasn't been passed on to the processor
+            mock.Verify(m => m.ProcessOrder(It.IsAny<Cart>(), It.IsAny<ShippingDetails>()), Times.Never());
+            // Assert - check that the mothod is returning the default view
+            Assert.AreEqual("", result.ViewName);
+            // Assert - check that I am passing an invalid model to the view
+            Assert.AreEqual(false, result.ViewData.ModelState.IsValid);
         }
     }
 }
