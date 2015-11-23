@@ -6,10 +6,21 @@
         <title>@ViewBag.Title</title>
         <link href="~/Content/bootstrap.css" rel="stylesheet" />
         <link href="~/Content/ErrorStyles.css" rel="stylesheet" />
+        <style>
+            .nvabar-right{
+                float: right !important;
+                margin-right: 15px; margin-left: 15px;
+            }
+        </style>
     </head>
     <body class="container">
         <div class="navbar navbar-inverse" role="navigation">
-            <a class="navbar-brand" href="#">SPORTS STORE</a>
+            <a class="navbar-brand" href="#">
+                <span class="hidden-xs">MVC STORE</span>
+                <div class="visible-xs">MVC</div>
+                <div class="visible-xs">STORE</div>
+            </a>
+            @*<a class="navbar-brand" href="#">MVC STORE</a>*@
             @Html.Action("Summary", "Cart")
         </div>
         <div class="row panel">
